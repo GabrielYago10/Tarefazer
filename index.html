@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Tarefazer</title>
+
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+
+    <!-- Fonte -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <header>
+
+        <div class="logo">
+
+            <h1>Tarefazer</h1>
+
+            <p>Organize seu fluxo, conclua mais.</p>
+
+        </div>
+
+        <button id="novaTarefa">
+            + Nova tarefa
+        </button>
+
+    </header>
+
+    <main class="kanban">
+
+        <section class="coluna">
+
+            <div class="titulo-coluna">
+                <h2>A Fazer</h2>
+                <span>0</span>
+            </div>
+
+            <div class="cards">
+
+    <div class="card alta">
+
+        <h3>Criar identidade visual</h3>
+
+        <p>Definir cores, logo e estilo do Tarefazer.</p>
+
+        <div class="card-footer">
+
+            <span class="prioridade">Alta</span>
+
+            <small>Hoje</small>
+
+        </div>
+
+    </div>
+
+    <div class="card media">
+
+        <h3>Estruturar HTML</h3>
+
+        <p>Montar toda a estrutura inicial do sistema.</p>
+
+        <div class="card-footer">
+
+            <span class="prioridade">Média</span>
+
+            <small>16 Jul</small>
+
+        </div>
+
+    </div>
+
+</div>
+
+        </section>
+
+        <section class="coluna">
+
+            <div class="titulo-coluna">
+                <h2>Fazendo</h2>
+                <span>0</span>
+            </div>
+
+            <div class="cards">
+
+    <div class="card baixa">
+
+        <h3>Criar CSS</h3>
+
+        <p>Desenvolver toda a identidade visual.</p>
+
+        <div class="card-footer">
+
+            <span class="prioridade">Baixa</span>
+
+            <small>17 Jul</small>
+
+        </div>
+
+    </div>
+
+</div>
+
+        </section>
+
+        <section class="coluna">
+
+            <div class="titulo-coluna">
+                <h2>Revisão</h2>
+                <span>0</span>
+            </div>
+
+            <div class="cards"></div>
+
+        </section>
+
+        <section class="coluna">
+
+            <div class="titulo-coluna">
+                <h2>Concluído</h2>
+                <span>0</span>
+            </div>
+
+            <div class="cards"></div>
+
+        </section>
+
+    </main>
+
+<div class="modal-overlay hidden">
+
+    <div class="modal">
+
+        <h2>Nova tarefa</h2>
+
+        <form>
+
+            <label>Título</label>
+
+            <input
+                type="text"
+                placeholder="Ex: Criar tela de login">
+
+            <label>Descrição</label>
+
+            <textarea
+                rows="4"
+                placeholder="Descreva a tarefa..."></textarea>
+
+            <label>Prioridade</label>
+
+            <select>
+
+                <option>Alta</option>
+                <option>Média</option>
+                <option>Baixa</option>
+
+            </select>
+
+            <label>Coluna</label>
+
+            <select>
+
+                <option>A Fazer</option>
+                <option>Fazendo</option>
+                <option>Revisão</option>
+                <option>Concluído</option>
+
+            </select>
+
+            <div class="acoes-modal">
+
+                <button type="button" class="cancelar">
+
+                    Cancelar
+
+                </button>
+
+                <button type="submit" class="salvar">
+
+                    Criar tarefa
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+    <script src="js/app.js"></script>
+
+</body>
+
+</html>
