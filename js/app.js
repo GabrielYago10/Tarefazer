@@ -47,12 +47,28 @@ modal.addEventListener("click", (event) => {
 
 function criarCard() {
 
-    console.log("Criando tarefa...");
+    const tarefa = {
+
+        id: Date.now(),
+
+        titulo: titulo.value,
+
+        descricao: descricao.value,
+
+        prioridade: propriedade.value,
+
+        coluna: coluna.value
+
+    };
+
+    console.log(tarefa);
 
 }
 
 form.addEventListener("submit", (event) => {
+
     console.log("Submit funcionando!");
+
     event.preventDefault();
 
     criarCard();
