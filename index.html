@@ -16,7 +16,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700&display=swap"
+        rel="stylesheet">
 
 </head>
 
@@ -40,166 +42,162 @@
 
     <main class="kanban">
 
-        <section class="coluna">
+        <section class="coluna" data-coluna="todo">
 
             <div class="titulo-coluna">
                 <h2>A Fazer</h2>
-                <span>0</span>
+                <span>2</span>
             </div>
 
-            <div class="cards">
+            <div class="cards" id="todo">
 
-    <div class="card alta">
+                <div class="card alta">
 
-        <h3>Criar identidade visual</h3>
+                    <h3>Criar identidade visual</h3>
 
-        <p>Definir cores, logo e estilo do Tarefazer.</p>
+                    <p>Definir cores, logo e estilo do Tarefazer.</p>
 
-        <div class="card-footer">
+                    <div class="card-footer">
 
-            <span class="prioridade">Alta</span>
+                        <span class="prioridade">Alta</span>
 
-            <small>Hoje</small>
+                        <small>Hoje</small>
 
-        </div>
+                    </div>
 
-    </div>
+                </div>
 
-    <div class="card media">
+                <div class="card media">
 
-        <h3>Estruturar HTML</h3>
+                    <h3>Estruturar HTML</h3>
 
-        <p>Montar toda a estrutura inicial do sistema.</p>
+                    <p>Montar toda a estrutura inicial do sistema.</p>
 
-        <div class="card-footer">
+                    <div class="card-footer">
 
-            <span class="prioridade">Média</span>
+                        <span class="prioridade">Média</span>
 
-            <small>16 Jul</small>
+                        <small>16 Jul</small>
 
-        </div>
+                    </div>
 
-    </div>
+                </div>
 
-</div>
+            </div>
 
         </section>
 
-        <section class="coluna">
+        <section class="coluna" data-coluna="doing">
 
             <div class="titulo-coluna">
                 <h2>Fazendo</h2>
-                <span>0</span>
+                <span>1</span>
             </div>
 
-            <div class="cards">
+            <div class="cards" id="doing">
 
-    <div class="card baixa">
+                <div class="card baixa">
 
-        <h3>Criar CSS</h3>
+                    <h3>Criar CSS</h3>
 
-        <p>Desenvolver toda a identidade visual.</p>
+                    <p>Desenvolver toda a identidade visual.</p>
 
-        <div class="card-footer">
+                    <div class="card-footer">
 
-            <span class="prioridade">Baixa</span>
+                        <span class="prioridade">Baixa</span>
 
-            <small>17 Jul</small>
+                        <small>17 Jul</small>
 
-        </div>
+                    </div>
 
-    </div>
+                </div>
 
-</div>
+            </div>
 
         </section>
 
-        <section class="coluna">
+        <section class="coluna" data-coluna="review">
 
             <div class="titulo-coluna">
                 <h2>Revisão</h2>
                 <span>0</span>
             </div>
 
-            <div class="cards"></div>
+            <div class="cards" id="review"></div>
 
         </section>
 
-        <section class="coluna">
+        <section class="coluna" data-coluna="done">
 
             <div class="titulo-coluna">
                 <h2>Concluído</h2>
                 <span>0</span>
             </div>
 
-            <div class="cards"></div>
+            <div class="cards" id="done"></div>
 
         </section>
 
     </main>
 
-<div class="modal-overlay hidden">
+    <div class="modal-overlay hidden">
 
-    <div class="modal">
+        <div class="modal">
 
-        <h2>Nova tarefa</h2>
+            <h2>Nova tarefa</h2>
 
-        <form>
+            <form id="formTarefa">
 
-            <label>Título</label>
+                <label>Título</label>
 
-            <input
-                type="text"
-                placeholder="Ex: Criar tela de login">
+                <input id="titulo" type="text" placeholder="Ex: Criar tela de login" required>
 
-            <label>Descrição</label>
+                <label>Descrição</label>
 
-            <textarea
-                rows="4"
-                placeholder="Descreva a tarefa..."></textarea>
+                <textarea id="descricao" rows="4" placeholder="Descreva a tarefa..." required></textarea>
 
-            <label>Prioridade</label>
+                <label>Prioridade</label>
 
-            <select>
+                <select id="propriedade">
 
-                <option>Alta</option>
-                <option>Média</option>
-                <option>Baixa</option>
+                    <option value="Alta">Alta</option>
+                    <option value="Média">Média</option>
+                    <option value="Baixa">Baixa</option>
 
-            </select>
+                </select>
 
-            <label>Coluna</label>
+                <label>Coluna</label>
 
-            <select>
+                <select id="coluna">
 
-                <option>A Fazer</option>
-                <option>Fazendo</option>
-                <option>Revisão</option>
-                <option>Concluído</option>
+                    <option value="todo">A Fazer</option>
+                    <option value="doing">Fazendo</option>
+                    <option value="review">Revisão</option>
+                    <option value="done">Concluído</option>
 
-            </select>
+                </select>
 
-            <div class="acoes-modal">
+                <div class="acoes-modal">
 
-                <button type="button" class="cancelar">
+                    <button type="button" class="cancelar">
 
-                    Cancelar
+                        Cancelar
 
-                </button>
+                    </button>
 
-                <button type="submit" class="salvar">
+                    <button type="submit" class="salvar">
 
-                    Criar tarefa
+                        Criar tarefa
 
-                </button>
+                    </button>
 
-            </div>
+                </div>
 
-        </form>
+            </form>
+
+        </div>
 
     </div>
-
-</div>
 
     <script src="js/app.js"></script>
 
