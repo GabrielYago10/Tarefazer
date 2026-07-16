@@ -173,11 +173,23 @@ header{
 
 .cards{
 
-    display:flex;
+    min-height: 200px;
 
-    flex-direction:column;
+    display: flex;
 
-    gap:16px;
+    flex-direction: column;
+
+    gap: 16px;
+
+}
+
+.cards.drag-over{
+
+    background: rgba(180,0,255,.08);
+
+    border: 2px dashed var(--primary);
+
+    border-radius: 12px;
 
 }
 

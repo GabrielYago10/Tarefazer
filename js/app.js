@@ -1,5 +1,7 @@
 let tarefas = carregarTarefas();
 
+let cardArrastando = null;
+
 const btnNovaTarefa = document.querySelector("#novaTarefa");
 
 const modal = document.querySelector(".modal-overlay");
@@ -95,7 +97,17 @@ form.addEventListener("submit", (event) => {
 function renderizarCard(tarefa) {
 
     const card = document.createElement("div");
+    card.draggable = true;
+
     card.classList.add("card");
+
+    card.addEventListener("dragstart", () => {
+
+        cardArrastando = card;
+
+        console.log("Começou a arrastar:", tarefa.id);
+
+    });
 
     if (tarefa.prioridade === "Alta") {
 
@@ -150,6 +162,44 @@ function atualizarContadores() {
 
 }
 
+function habilitarDrop() {
+
+    document.querySelectorAll(".cards").forEach(coluna => {
+
+        coluna.addEventListener("dragover", (event) => {
+
+            event.preventDefault();
+
+            coluna.classList.add("drag-over");
+
+        });
+
+        coluna.addEventListener("dragleave", () => {
+
+            coluna.classList.remove("drag-over");
+
+        });
+
+        coluna.addEventListener("drop", () => {
+
+            if (cardArrastando) {
+
+                coluna.appendChild(cardArrastando);
+
+                atualizarContadores();
+
+                coluna.classList.remove("drag-over");
+
+                cardArrastando = null;
+
+            }
+
+        });
+
+    });
+
+}
+
 function carregarCards() {
 
     tarefas.forEach(tarefa => {
@@ -167,6 +217,7 @@ function carregarCards() {
 }
 
 carregarCards();
+habilitarDrop();
 
 
 
