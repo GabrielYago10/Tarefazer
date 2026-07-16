@@ -35,7 +35,7 @@ btnCancelar.addEventListener("click", () => {
 
 modal.addEventListener("click", (event) => {
 
-    if(event.target === modal){
+    if (event.target === modal) {
 
         modal.classList.add("hidden");
 
@@ -61,6 +61,12 @@ function criarCard() {
 
     };
 
+    const card = renderizarCard(tarefa);
+
+    const colunaDestino = document.querySelector(`#${tarefa.coluna}`);
+
+    colunaDestino.appendChild(card);
+
     console.log(tarefa);
 
 }
@@ -74,3 +80,50 @@ form.addEventListener("submit", (event) => {
     criarCard();
 
 });
+
+
+function renderizarCard(tarefa) {
+
+    const card = document.createElement("div");
+    card.classList.add("card");
+
+    if (tarefa.prioridade === "Alta") {
+
+        card.classList.add("alta");
+
+    } else if (tarefa.prioridade === "Média") {
+
+        card.classList.add("media");
+
+    } else {
+
+        card.classList.add("baixa");
+
+    }
+
+    const tituloCard = document.createElement("h3");
+    tituloCard.textContent = tarefa.titulo;
+
+    const descricaoCard = document.createElement("p");
+    descricaoCard.textContent = tarefa.descricao;
+
+    const footer = document.createElement("div");
+    footer.classList.add("card-footer");
+
+    const prioridade = document.createElement("span");
+    prioridade.classList.add("prioridade");
+    prioridade.textContent = tarefa.prioridade;
+
+    const data = document.createElement("small");
+    data.textContent = "Hoje";
+
+    footer.appendChild(prioridade);
+    footer.appendChild(data);
+
+    card.appendChild(tituloCard);
+    card.appendChild(descricaoCard);
+    card.appendChild(footer);
+
+    return card;
+
+}
