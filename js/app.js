@@ -1,3 +1,5 @@
+let tarefas = carregarTarefas();
+
 const btnNovaTarefa = document.querySelector("#novaTarefa");
 
 const modal = document.querySelector(".modal-overlay");
@@ -61,13 +63,21 @@ function criarCard() {
 
     };
 
+    tarefas.push(tarefa);
+
+    salvarTarefas(tarefas);
+
     const card = renderizarCard(tarefa);
 
     const colunaDestino = document.querySelector(`#${tarefa.coluna}`);
 
     colunaDestino.appendChild(card);
 
-    console.log(tarefa);
+    atualizarContadores();
+
+    form.reset();
+
+    modal.classList.add("hidden");
 
 }
 
@@ -127,3 +137,39 @@ function renderizarCard(tarefa) {
     return card;
 
 }
+
+function atualizarContadores() {
+
+    document.querySelectorAll(".coluna").forEach(coluna => {
+
+        const quantidade = coluna.querySelectorAll(".card").length;
+
+        coluna.querySelector(".titulo-coluna span").textContent = quantidade;
+
+    });
+
+}
+
+function carregarCards() {
+
+    tarefas.forEach(tarefa => {
+
+        const card = renderizarCard(tarefa);
+
+        const colunaDestino = document.querySelector(`#${tarefa.coluna}`);
+
+        colunaDestino.appendChild(card);
+
+    });
+
+    atualizarContadores();
+
+}
+
+carregarCards();
+
+
+
+
+
+
