@@ -16,6 +16,8 @@ const descricao = document.querySelector("#descricao");
 const propriedade = document.querySelector("#propriedade");
 const coluna = document.querySelector("#coluna");
 
+const lixeira = document.querySelector("#lixeira");
+
 
 // Abrir modal
 
@@ -105,7 +107,20 @@ function renderizarCard(tarefa) {
 
         cardArrastando = card;
 
-        console.log("Começou a arrastar:", tarefa.id);
+        card.classList.add("arrastando");
+
+        lixeira.classList.add("ativa");
+
+    });
+
+
+    card.addEventListener("dragend", () => {
+
+        card.classList.remove("arrastando");
+
+        lixeira.classList.remove("ativa");
+
+        lixeira.classList.remove("hover");
 
     });
 
@@ -219,6 +234,41 @@ function carregarCards() {
 carregarCards();
 habilitarDrop();
 
+
+lixeira.addEventListener("dragover", (event) => {
+
+    event.preventDefault();
+
+    lixeira.classList.add("hover");
+
+});
+
+lixeira.addEventListener("dragleave", () => {
+
+    lixeira.classList.remove("hover");
+
+});
+
+lixeira.addEventListener("drop", () => {
+
+    if (!cardArrastando) return;
+
+    const id = Number(cardArrastando.dataset.id);
+
+    tarefas = tarefas.filter(tarefa => tarefa.id !== id);
+
+    salvarTarefas(tarefas);
+
+    cardArrastando.remove();
+
+    atualizarContadores();
+
+    cardArrastando = null;
+
+    lixeira.classList.remove("hover");
+    lixeira.classList.remove("ativa");
+
+});
 
 
 

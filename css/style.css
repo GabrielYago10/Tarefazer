@@ -187,9 +187,13 @@ header{
 
     background: rgba(180,0,255,.08);
 
-    border: 2px dashed var(--primary);
+    border:2px dashed var(--primary);
 
-    border-radius: 12px;
+    border-radius:12px;
+
+    transform:scale(1.02);
+
+    transition:.2s;
 
 }
 
@@ -207,11 +211,29 @@ header{
 
     padding:18px;
 
-    transition:.25s;
+    transition:
+        transform .25s,
+        opacity .25s,
+        box-shadow .25s;
 
-    cursor:pointer;
+    cursor:grab;
 
 }
+
+.card:active{
+
+    cursor:grabbing;
+
+}
+
+.arrastando{
+
+    opacity:.5;
+
+    transform:rotate(4deg) scale(.95);
+
+}
+
 
 .card:hover{
 
@@ -434,5 +456,77 @@ header{
 .hidden{
 
     display:none;
+
+}
+
+.lixeira{
+
+    position: fixed;
+
+    bottom: 30px;
+
+    right: 30px;
+
+    width: 180px;
+
+    height: 180px;
+
+    border-radius: 50%;
+
+    background: #1f2937;
+
+    border: 3px dashed #ef4444;
+
+    color: white;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 10px;
+
+    font-size: 40px;
+
+    opacity: 0;
+
+    transform: scale(.7);
+
+    pointer-events: none;
+
+    transition: .3s;
+
+    z-index: 999;
+
+}
+
+.lixeira span{
+
+    font-size:14px;
+
+    text-align:center;
+
+    padding:0 20px;
+
+}
+
+.lixeira.ativa{
+
+    opacity:1;
+
+    transform:scale(1);
+
+    pointer-events:auto;
+
+}
+
+.lixeira.hover{
+
+    transform:scale(1.15);
+
+    background:#ef4444;
 
 }
