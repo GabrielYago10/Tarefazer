@@ -20,6 +20,7 @@ const coluna = document.querySelector("#coluna");
 
 const lixeira = document.querySelector("#lixeira");
 const btnSalvar = document.querySelector(".salvar");
+const dataVencimento = document.querySelector("#dataVencimento");
 
 // Abrir modal
 
@@ -60,6 +61,7 @@ function criarCard() {
         tarefaEditando.titulo = titulo.value;
         tarefaEditando.descricao = descricao.value;
         tarefaEditando.prioridade = propriedade.value;
+        tarefaEditando.dataVencimento = dataVencimento.value;
         tarefaEditando.coluna = coluna.value;
 
         salvarTarefas(tarefas);
@@ -86,6 +88,8 @@ function criarCard() {
         descricao: descricao.value,
 
         prioridade: propriedade.value,
+
+        dataVencimento: dataVencimento.value,
 
         coluna: coluna.value
 
@@ -177,7 +181,16 @@ function renderizarCard(tarefa) {
     prioridade.textContent = tarefa.prioridade;
 
     const data = document.createElement("small");
-    data.textContent = "Hoje";
+
+    if (tarefa.dataVencimento) {
+
+        data.textContent = "📅 " + tarefa.dataVencimento;
+
+    } else {
+
+        data.textContent = "Sem data";
+
+    }
 
     footer.appendChild(prioridade);
     footer.appendChild(data);
@@ -242,7 +255,7 @@ function habilitarDrop() {
 
             cardArrastando = null;
 
-        });   
+        });
     });
 
 }
@@ -319,6 +332,7 @@ function editarTarefa(id) {
     titulo.value = tarefa.titulo;
     descricao.value = tarefa.descricao;
     propriedade.value = tarefa.prioridade;
+    dataVencimento.value + tarefa.dataVencimento;
     coluna.value = tarefa.coluna;
 
     btnSalvar.textContent = "Salvar alterações";
