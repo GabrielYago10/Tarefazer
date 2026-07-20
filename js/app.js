@@ -2,6 +2,8 @@ let tarefas = carregarTarefas();
 
 let cardArrastando = null;
 
+let tarefaEditando = null;
+
 const btnNovaTarefa = document.querySelector("#novaTarefa");
 
 const modal = document.querySelector(".modal-overlay");
@@ -17,7 +19,7 @@ const propriedade = document.querySelector("#propriedade");
 const coluna = document.querySelector("#coluna");
 
 const lixeira = document.querySelector("#lixeira");
-
+const btnSalvar = document.querySelector(".salvar");
 
 // Abrir modal
 
@@ -53,6 +55,28 @@ modal.addEventListener("click", (event) => {
 
 function criarCard() {
 
+    if (tarefaEditando) {
+
+        tarefaEditando.titulo = titulo.value;
+        tarefaEditando.descricao = descricao.value;
+        tarefaEditando.prioridade = propriedade.value;
+        tarefaEditando.coluna = coluna.value;
+
+        salvarTarefas(tarefas);
+
+        renderizarKanban();
+
+        tarefaEditando = null;
+        btnSalvar.textContent = "Criar tarefa";
+
+        form.reset();
+
+        modal.classList.add("hidden");
+
+        return;
+
+    }
+
     const tarefa = {
 
         id: Date.now(),
@@ -71,13 +95,7 @@ function criarCard() {
 
     salvarTarefas(tarefas);
 
-    const card = renderizarCard(tarefa);
-
-    const colunaDestino = document.querySelector(`#${tarefa.coluna}`);
-
-    colunaDestino.appendChild(card);
-
-    atualizarContadores();
+    renderizarKanban();
 
     form.reset();
 
@@ -99,6 +117,7 @@ form.addEventListener("submit", (event) => {
 function renderizarCard(tarefa) {
 
     const card = document.createElement("div");
+    card.dataset.id = tarefa.id;
     card.draggable = true;
 
     card.classList.add("card");
@@ -121,6 +140,12 @@ function renderizarCard(tarefa) {
         lixeira.classList.remove("ativa");
 
         lixeira.classList.remove("hover");
+
+    });
+
+    card.addEventListener("dblclick", () => {
+
+        editarTarefa(tarefa.id);
 
     });
 
@@ -197,25 +222,38 @@ function habilitarDrop() {
 
         coluna.addEventListener("drop", () => {
 
-            if (cardArrastando) {
+            if (!cardArrastando) return;
 
-                coluna.appendChild(cardArrastando);
+            const id = Number(cardArrastando.dataset.id);
 
-                atualizarContadores();
+            const tarefa = tarefas.find(t => t.id === id);
 
-                coluna.classList.remove("drag-over");
+            if (tarefa) {
 
-                cardArrastando = null;
+                tarefa.coluna = coluna.id;
+
+                salvarTarefas(tarefas);
 
             }
 
-        });
+            renderizarKanban();
 
+            coluna.classList.remove("drag-over");
+
+            cardArrastando = null;
+
+        });   
     });
 
 }
 
-function carregarCards() {
+function renderizarKanban() {
+
+    document.querySelectorAll(".cards").forEach(coluna => {
+
+        coluna.innerHTML = "";
+
+    });
 
     tarefas.forEach(tarefa => {
 
@@ -231,7 +269,7 @@ function carregarCards() {
 
 }
 
-carregarCards();
+renderizarKanban();
 habilitarDrop();
 
 
@@ -269,6 +307,25 @@ lixeira.addEventListener("drop", () => {
     lixeira.classList.remove("ativa");
 
 });
+
+function editarTarefa(id) {
+
+    const tarefa = tarefas.find(t => t.id === id);
+
+    if (!tarefa) return;
+
+    tarefaEditando = tarefa;
+
+    titulo.value = tarefa.titulo;
+    descricao.value = tarefa.descricao;
+    propriedade.value = tarefa.prioridade;
+    coluna.value = tarefa.coluna;
+
+    btnSalvar.textContent = "Salvar alterações";
+
+    modal.classList.remove("hidden");
+
+}
 
 
 
