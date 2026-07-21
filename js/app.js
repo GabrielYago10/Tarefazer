@@ -21,6 +21,7 @@ const coluna = document.querySelector("#coluna");
 const lixeira = document.querySelector("#lixeira");
 const btnSalvar = document.querySelector(".salvar");
 const dataVencimento = document.querySelector("#dataVencimento");
+const etiqueta = document.querySelector("#etiqueta");
 
 // Abrir modal
 
@@ -62,6 +63,7 @@ function criarCard() {
         tarefaEditando.descricao = descricao.value;
         tarefaEditando.prioridade = propriedade.value;
         tarefaEditando.dataVencimento = dataVencimento.value;
+        tarefaEditando.etiqueta = etiqueta.value;
         tarefaEditando.coluna = coluna.value;
 
         salvarTarefas(tarefas);
@@ -90,6 +92,8 @@ function criarCard() {
         prioridade: propriedade.value,
 
         dataVencimento: dataVencimento.value,
+
+        etiqueta: etiqueta.value,
 
         coluna: coluna.value
 
@@ -332,7 +336,8 @@ function editarTarefa(id) {
     titulo.value = tarefa.titulo;
     descricao.value = tarefa.descricao;
     propriedade.value = tarefa.prioridade;
-    dataVencimento.value + tarefa.dataVencimento;
+    dataVencimento.value = tarefa.dataVencimento;
+    etiqueta.value = tarefa.etiqueta;
     coluna.value = tarefa.coluna;
 
     btnSalvar.textContent = "Salvar alterações";
