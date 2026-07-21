@@ -22,6 +22,7 @@ const lixeira = document.querySelector("#lixeira");
 const btnSalvar = document.querySelector(".salvar");
 const dataVencimento = document.querySelector("#dataVencimento");
 const etiqueta = document.querySelector("#etiqueta");
+const pesquisa = document.querySelector("#pesquisa");
 
 // Abrir modal
 
@@ -272,15 +273,26 @@ function renderizarKanban() {
 
     });
 
-    tarefas.forEach(tarefa => {
+    const textoPesquisa = pesquisa.value.toLowerCase();
 
-        const card = renderizarCard(tarefa);
+    tarefas
+        .filter(tarefa => {
 
-        const colunaDestino = document.querySelector(`#${tarefa.coluna}`);
+            return tarefa.titulo.toLowerCase().includes(textoPesquisa)
 
-        colunaDestino.appendChild(card);
+                || tarefa.descricao.toLowerCase().includes(textoPesquisa);
 
-    });
+        })
+
+        .forEach(tarefa => {
+
+            const card = renderizarCard(tarefa);
+
+            const colunaDestino = document.querySelector(`#${tarefa.coluna}`);
+
+            colunaDestino.appendChild(card);
+
+        });
 
     atualizarContadores();
 
@@ -345,6 +357,10 @@ function editarTarefa(id) {
     modal.classList.remove("hidden");
 
 }
+
+pesquisa.addEventListener("input", () => {
+    renderizarKanban();
+});
 
 
 
