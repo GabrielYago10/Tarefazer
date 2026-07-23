@@ -181,6 +181,12 @@ function renderizarCard(tarefa) {
     const footer = document.createElement("div");
     footer.classList.add("card-footer");
 
+    const tag = document.createElement("span");
+
+    tag.classList.add("tag");
+
+    tag.textContent =  tarefa.etiqueta;
+
     const prioridade = document.createElement("span");
     prioridade.classList.add("prioridade");
     prioridade.textContent = tarefa.prioridade;
@@ -193,7 +199,7 @@ function renderizarCard(tarefa) {
 
     } else {
 
-        data.textContent = "Sem data";
+        data.textContent = "Sem Previsão";
 
     }
 
@@ -202,6 +208,7 @@ function renderizarCard(tarefa) {
 
     card.appendChild(tituloCard);
     card.appendChild(descricaoCard);
+    card.appendChild(tag);
     card.appendChild(footer);
 
     return card;

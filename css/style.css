@@ -535,15 +535,19 @@ header{
 
     display:inline-block;
 
-    margin-top:10px;
+    margin-bottom:15px;
 
-    padding:5px 10px;
+    padding:6px 12px;
 
     border-radius:20px;
 
     font-size:12px;
 
     font-weight:600;
+
+    background:rgba(180,0,255,.15);
+
+    color:#c77dff;
 
 }
 
