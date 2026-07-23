@@ -185,7 +185,7 @@ function renderizarCard(tarefa) {
 
     tag.classList.add("tag");
 
-    tag.textContent =  tarefa.etiqueta;
+    tag.textContent = tarefa.etiqueta;
 
     const prioridade = document.createElement("span");
     prioridade.classList.add("prioridade");
@@ -224,6 +224,24 @@ function atualizarContadores() {
         coluna.querySelector(".titulo-coluna span").textContent = quantidade;
 
     });
+
+}
+
+function atualizarDashboard() {
+
+    document.querySelector("#totalTarefas").textContent = tarefas.length;
+
+    document.querySelector("#todoCount").textContent =
+        tarefas.filter(t => t.coluna === "todo").length;
+
+    document.querySelector("#doingCount").textContent =
+        tarefas.filter(t => t.coluna === "doing").length;
+
+    document.querySelector("#doneCount").textContent =
+        tarefas.filter(t => t.coluna === "done").length;
+
+    document.querySelector("#reviewCount").textContent =
+        tarefas.filter(t => t.coluna === "review").length;
 
 }
 
@@ -302,6 +320,7 @@ function renderizarKanban() {
         });
 
     atualizarContadores();
+    atualizarDashboard();
 
 }
 
