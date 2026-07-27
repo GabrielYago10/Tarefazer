@@ -2,7 +2,7 @@ let tarefas = carregarTarefas();
 let cardArrastando = null;
 let tarefaEditando = null;
 let ultimaTarefaRemovida = null;
-
+let tempoToast = null;
 const btnNovaTarefa = document.querySelector("#novaTarefa");
 
 const modal = document.querySelector(".modal-overlay");
@@ -25,6 +25,7 @@ const pesquisa = document.querySelector("#pesquisa");
 const toast = document.querySelector("#toast");
 const toastMensagem = document.querySelector("#toastMensagem");
 const btnDesfazer = document.querySelector("#btnDesfazer");
+const contadorToast = document.querySelector("#contadorToast");
 
 // Abrir modal
 
@@ -356,7 +357,7 @@ lixeira.addEventListener("drop", () => {
 
     salvarTarefas(tarefas);
 
-    mostrarToast("🗑️ Tarefa excluída.");
+    mostrarToast("Tarefa excluída.");
 
     cardArrastando.remove();
 
@@ -392,15 +393,33 @@ function editarTarefa(id) {
 
 function mostrarToast(mensagem) {
 
+    clearInterval(tempoToast);
+
+    let segundos = 5;
+
+    contadorToast.textContent = segundos;
+
     toastMensagem.textContent = mensagem;
 
     toast.classList.remove("hidden");
 
-    setTimeout(() => {
+    tempoToast = setInterval(() => {
 
-        toast.classList.add("hidden");
+        segundos--;
 
-    }, 5000);
+        contadorToast.textContent = segundos;
+
+        if (segundos <= 0) {
+
+            clearInterval(tempoToast);
+
+            toast.classList.add("hidden");
+
+            ultimaTarefaRemovida = null;
+
+        }
+
+    }, 1000);
 
 }
 
