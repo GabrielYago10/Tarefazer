@@ -1,8 +1,7 @@
 let tarefas = carregarTarefas();
-
 let cardArrastando = null;
-
 let tarefaEditando = null;
+let ultimaTarefaRemovida = null;
 
 const btnNovaTarefa = document.querySelector("#novaTarefa");
 
@@ -23,6 +22,9 @@ const btnSalvar = document.querySelector(".salvar");
 const dataVencimento = document.querySelector("#dataVencimento");
 const etiqueta = document.querySelector("#etiqueta");
 const pesquisa = document.querySelector("#pesquisa");
+const toast = document.querySelector("#toast");
+const toastMensagem = document.querySelector("#toastMensagem");
+const btnDesfazer = document.querySelector("#btnDesfazer");
 
 // Abrir modal
 
@@ -348,9 +350,13 @@ lixeira.addEventListener("drop", () => {
 
     const id = Number(cardArrastando.dataset.id);
 
+    ultimaTarefaRemovida = tarefas.find(t => t.id === id);
+
     tarefas = tarefas.filter(tarefa => tarefa.id !== id);
 
     salvarTarefas(tarefas);
+
+    mostrarToast("🗑️ Tarefa excluída.");
 
     cardArrastando.remove();
 
@@ -384,11 +390,38 @@ function editarTarefa(id) {
 
 }
 
+function mostrarToast(mensagem) {
+
+    toastMensagem.textContent = mensagem;
+
+    toast.classList.remove("hidden");
+
+    setTimeout(() => {
+
+        toast.classList.add("hidden");
+
+    }, 5000);
+
+}
+
+
+
 pesquisa.addEventListener("input", () => {
     renderizarKanban();
 });
 
+btnDesfazer.addEventListener("click", () => {
 
+    if (!ultimaTarefaRemovida) return;
 
+    tarefas.push(ultimaTarefaRemovida);
 
+    salvarTarefas(tarefas);
 
+    renderizarKanban();
+
+    toast.classList.add("hidden");
+
+    ultimaTarefaRemovida = null;
+
+});

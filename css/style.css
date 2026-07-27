@@ -892,3 +892,63 @@ header{
 
 .card-dashboard:nth-child(5)::before{ background:var(--accent-done); }
 .card-dashboard:nth-child(5) span{ color:var(--accent-done); }
+
+/* ==========================
+   TOAST
+========================== */
+
+.toast{
+
+    position:fixed;
+
+    left:50%;
+
+    bottom:30px;
+
+    transform:translateX(-50%);
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+    padding:16px 22px;
+
+    background:var(--surface);
+
+    border:1px solid var(--border);
+
+    border-radius:14px;
+
+    box-shadow:var(--shadow);
+
+    z-index:9999;
+
+    transition:.25s;
+
+}
+
+.toast button{
+
+    border:none;
+
+    background:transparent;
+
+    color:var(--primary);
+
+    font-weight:600;
+
+    cursor:pointer;
+
+}
+
+.toast.hidden{
+
+    opacity:0;
+
+    pointer-events:none;
+
+    transform:translate(-50%,20px);
+
+}
