@@ -3,20 +3,15 @@ let cardArrastando = null;
 let tarefaEditando = null;
 let ultimaTarefaRemovida = null;
 let tempoToast = null;
+
 const btnNovaTarefa = document.querySelector("#novaTarefa");
-
 const modal = document.querySelector(".modal-overlay");
-
 const btnCancelar = document.querySelector(".cancelar");
-
-
 const form = document.querySelector("#formTarefa");
-
 const titulo = document.querySelector("#titulo");
 const descricao = document.querySelector("#descricao");
 const propriedade = document.querySelector("#propriedade");
 const coluna = document.querySelector("#coluna");
-
 const lixeira = document.querySelector("#lixeira");
 const btnSalvar = document.querySelector(".salvar");
 const dataVencimento = document.querySelector("#dataVencimento");
@@ -397,7 +392,7 @@ function mostrarToast(mensagem) {
 
     let segundos = 5;
 
-    contadorToast.textContent = segundos;
+    contadorToast.textContent = String(segundos).padStart(2,"0");
 
     toastMensagem.textContent = mensagem;
 
@@ -407,7 +402,7 @@ function mostrarToast(mensagem) {
 
         segundos--;
 
-        contadorToast.textContent = segundos;
+        contadorToast.textContent = String(segundos).padStart(2,"0");
 
         if (segundos <= 0) {
 
