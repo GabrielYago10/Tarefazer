@@ -319,6 +319,210 @@ function renderizarKanban() {
 
     atualizarContadores();
     atualizarDashboard();
+    renderizarGraficoFundo();
+
+}
+
+/* ==========================
+   GRÁFICO DE FUNDO
+   Camadas em "cordilheira" com o total acumulado, tarefas em
+   andamento e tarefas concluídas nos últimos 14 dias — tudo
+   derivado do id de cada tarefa (timestamp de criação) e da
+   coluna atual. Puramente decorativo, atrás do dashboard.
+========================== */
+
+let primeiraRenderizacaoGrafico = true;
+
+function construirCurvaSuave(pontos) {
+
+    if (pontos.length < 2) return "";
+
+    let caminho = `M${pontos[0].x},${pontos[0].y}`;
+
+    for (let i = 0; i < pontos.length - 1; i++) {
+
+        const p0 = pontos[i - 1] || pontos[i];
+        const p1 = pontos[i];
+        const p2 = pontos[i + 1];
+        const p3 = pontos[i + 2] || p2;
+
+        const cp1x = p1.x + (p2.x - p0.x) / 6;
+        const cp1y = p1.y + (p2.y - p0.y) / 6;
+        const cp2x = p2.x - (p3.x - p1.x) / 6;
+        const cp2y = p2.y - (p3.y - p1.y) / 6;
+
+        caminho += ` C${cp1x},${cp1y} ${cp2x},${cp2y} ${p2.x},${p2.y}`;
+
+    }
+
+    return caminho;
+
+}
+
+function calcularSerieAcumulada(filtro, dias, largura, altura, padding, maiorValor) {
+
+    const hoje = new Date();
+    hoje.setHours(23, 59, 59, 999);
+
+    const valores = [];
+
+    for (let i = dias - 1; i >= 0; i--) {
+
+        const dataRef = new Date(hoje);
+        dataRef.setDate(hoje.getDate() - i);
+
+        const limite = dataRef.getTime();
+
+        const total = tarefas.filter(t => t.id <= limite && filtro(t)).length;
+
+        valores.push(total);
+
+    }
+
+    return valores.map((valor, i) => {
+
+        const x = (i / (dias - 1)) * largura;
+        const y = altura - padding - (valor / maiorValor) * (altura - padding * 2);
+
+        return { x, y };
+
+    });
+
+}
+
+function renderizarGraficoFundo() {
+
+    const container = document.querySelector("#heroChart");
+
+    if (!container) return;
+
+    const dias = 14;
+    const largura = 1000;
+    const altura = 320;
+    const padding = 30;
+
+    const totalHoje = tarefas.length;
+    const maiorValor = Math.max(totalHoje, 1);
+
+    const pontosTotal = calcularSerieAcumulada(() => true, dias, largura, altura, padding, maiorValor);
+
+    const pontosAndamento = calcularSerieAcumulada(
+        t => t.coluna === "doing" || t.coluna === "review",
+        dias, largura, altura, padding, maiorValor
+    );
+
+    const pontosConcluido = calcularSerieAcumulada(
+        t => t.coluna === "done",
+        dias, largura, altura, padding, maiorValor
+    );
+
+    const linhaTotal = construirCurvaSuave(pontosTotal);
+    const linhaAndamento = construirCurvaSuave(pontosAndamento);
+    const linhaConcluido = construirCurvaSuave(pontosConcluido);
+
+    const areaTotal = `${linhaTotal} L${largura},${altura} L0,${altura} Z`;
+    const areaAndamento = `${linhaAndamento} L${largura},${altura} L0,${altura} Z`;
+    const areaConcluido = `${linhaConcluido} L${largura},${altura} L0,${altura} Z`;
+
+    const ultimoPonto = pontosTotal[pontosTotal.length - 1];
+
+    let grade = "";
+
+    for (let i = 1; i <= 3; i++) {
+
+        const y = (altura / 4) * i;
+
+        grade += `<line x1="0" y1="${y}" x2="${largura}" y2="${y}" stroke="rgba(255,255,255,.05)" stroke-width="1"></line>`;
+
+    }
+
+    for (let i = 1; i <= 6; i++) {
+
+        const x = (largura / 7) * i;
+
+        grade += `<line x1="${x}" y1="0" x2="${x}" y2="${altura}" stroke="rgba(255,255,255,.035)" stroke-width="1"></line>`;
+
+    }
+
+    container.innerHTML = `
+        <svg viewBox="0 0 ${largura} ${altura}" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+
+            <defs>
+
+                <linearGradient id="gradConcluido" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#34D399" stop-opacity="0.16" />
+                    <stop offset="100%" stop-color="#34D399" stop-opacity="0" />
+                </linearGradient>
+
+                <linearGradient id="gradAndamento" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#38BDF8" stop-opacity="0.2" />
+                    <stop offset="100%" stop-color="#38BDF8" stop-opacity="0" />
+                </linearGradient>
+
+                <linearGradient id="gradTotal" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#8B5CF6" stop-opacity="0.45" />
+                    <stop offset="100%" stop-color="#8B5CF6" stop-opacity="0" />
+                </linearGradient>
+
+                <linearGradient id="gradLinha" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stop-color="#FBBF24" />
+                    <stop offset="100%" stop-color="#F59E0B" />
+                </linearGradient>
+
+                <filter id="brilhoLinha" x="-50%" y="-50%" width="200%" height="200%">
+                    <feGaussianBlur stdDeviation="4.5" result="blur" />
+                    <feMerge>
+                        <feMergeNode in="blur" />
+                        <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                </filter>
+
+            </defs>
+
+            <g class="grade-fundo">${grade}</g>
+
+            <g class="onda onda-fundo">
+                <path d="${areaConcluido}" fill="url(#gradConcluido)"></path>
+            </g>
+
+            <g class="onda onda-meio">
+                <path d="${areaAndamento}" fill="url(#gradAndamento)"></path>
+            </g>
+
+            <g class="onda onda-frente">
+                <path d="${areaTotal}" fill="url(#gradTotal)"></path>
+                <path class="linha-principal" d="${linhaTotal}" fill="none" stroke="url(#gradLinha)" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round" filter="url(#brilhoLinha)"></path>
+
+                <circle class="ponto-pulso-halo" cx="${ultimoPonto.x}" cy="${ultimoPonto.y}" r="6" fill="#FBBF24"></circle>
+                <circle class="ponto-pulso-nucleo" cx="${ultimoPonto.x}" cy="${ultimoPonto.y}" r="4" fill="#FEF3C7"></circle>
+            </g>
+
+        </svg>
+    `;
+
+    const linhaEl = container.querySelector(".linha-principal");
+
+    if (linhaEl && primeiraRenderizacaoGrafico) {
+
+        const comprimento = linhaEl.getTotalLength();
+
+        linhaEl.style.strokeDasharray = comprimento;
+        linhaEl.style.strokeDashoffset = comprimento;
+
+        linhaEl.getBoundingClientRect(); // força o navegador a registrar o estado inicial antes de animar
+
+        linhaEl.style.transition = "stroke-dashoffset 1.8s ease";
+
+        requestAnimationFrame(() => {
+
+            linhaEl.style.strokeDashoffset = "0";
+
+        });
+
+        primeiraRenderizacaoGrafico = false;
+
+    }
 
 }
 

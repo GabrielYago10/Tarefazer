@@ -83,6 +83,154 @@ header, .barra-pesquisa, .dashboard, .kanban, .modal-overlay, .lixeira{
 }
 
 /* ==========================
+   HERO (cabeçalho + busca + dashboard)
+========================== */
+
+.hero{
+
+    position:relative;
+
+    z-index:1;
+
+}
+
+/* Gráfico decorativo de fundo — total acumulado de tarefas.
+   Fica atrás da busca e dos cards, sem passar por trás do título
+   pra não atrapalhar a leitura. Gerado em SVG pelo app.js */
+
+.hero-chart{
+
+    position:absolute;
+
+    left:0;
+    right:0;
+
+    top:110px;
+    bottom:-30px;
+
+    z-index:0;
+
+    opacity:0;
+
+    pointer-events:none;
+
+    animation:apareceGrafico 1.6s ease .2s forwards;
+
+}
+
+@keyframes apareceGrafico{
+
+    from{ opacity:0; transform:translateY(10px); }
+    to{ opacity:.7; transform:translateY(0); }
+
+}
+
+.hero-chart svg{
+
+    width:100%;
+    height:100%;
+
+    display:block;
+
+}
+
+/* Grade técnica desativada — descomente/apague esta regra se quiser
+   trazer as linhas de grade de volta no fundo do gráfico */
+
+.grade-fundo{
+
+    display:none;
+
+}
+
+/* Respiração sutil das camadas — cada uma com tempo e sentido
+   diferentes, pra parecer orgânico e não sincronizado */
+
+.onda{
+
+    transform-box:fill-box;
+    transform-origin:center;
+
+}
+
+.onda-fundo{
+
+    animation:respirarOnda 9s ease-in-out infinite;
+
+}
+
+.onda-meio{
+
+    animation:respirarOnda 12s ease-in-out infinite reverse;
+
+}
+
+.onda-frente{
+
+    animation:respirarOnda 15s ease-in-out infinite;
+
+}
+
+@keyframes respirarOnda{
+
+    0%, 100%{ transform:translateY(0); }
+    50%{ transform:translateY(5px); }
+
+}
+
+/* Ponto pulsante marcando "hoje", no fim da linha principal */
+
+.ponto-pulso-halo{
+
+    transform-box:fill-box;
+    transform-origin:center;
+
+    animation:pulsarHalo 2.4s ease-out infinite;
+
+}
+
+.ponto-pulso-nucleo{
+
+    animation:pulsarNucleo 2.4s ease-out infinite;
+
+}
+
+@keyframes pulsarHalo{
+
+    0%{ transform:scale(1); opacity:.55; }
+    70%{ transform:scale(3.2); opacity:0; }
+    100%{ transform:scale(3.2); opacity:0; }
+
+}
+
+@keyframes pulsarNucleo{
+
+    0%, 100%{ opacity:1; }
+    50%{ opacity:.65; }
+
+}
+
+@media (prefers-reduced-motion: reduce){
+
+    .onda, .ponto-pulso-halo, .ponto-pulso-nucleo{
+
+        animation:none;
+
+    }
+
+}
+
+@media (max-width:720px){
+
+    .hero-chart{
+
+        top:170px;
+
+    }
+
+}
+
+/* ==========================
    HEADER
 ========================== */
 
@@ -762,7 +910,10 @@ header{
 
     border: 1px solid var(--border-soft);
 
-    background: var(--surface);
+    background: rgba(19,26,44,.55);
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
 
     color: white;
 
@@ -816,7 +967,7 @@ header{
 
     position:relative;
 
-    background:var(--surface);
+    background:rgba(19,26,44,.5);
 
     border:1px solid var(--border-soft);
 
@@ -828,7 +979,17 @@ header{
 
     box-shadow:var(--shadow-sm);
 
-    transition:transform .25s, box-shadow .25s;
+    backdrop-filter:blur(16px) saturate(140%);
+    -webkit-backdrop-filter:blur(16px) saturate(140%);
+
+    transition:transform .25s, box-shadow .25s, background .25s;
+
+}
+
+.card-dashboard:hover{
+
+    background:rgba(26,35,56,.6);
+    transform:translateY(-3px);
 
 }
 
@@ -841,12 +1002,6 @@ header{
     top:0; left:0; right:0;
 
     height:3px;
-
-}
-
-.card-dashboard:hover{
-
-    transform:translateY(-3px);
 
 }
 
