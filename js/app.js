@@ -21,10 +21,14 @@ const toast = document.querySelector("#toast");
 const toastMensagem = document.querySelector("#toastMensagem");
 const btnDesfazer = document.querySelector("#btnDesfazer");
 const contadorToast = document.querySelector("#contadorToast");
+const tituloModal = document.querySelector(".modal h2");
 
 // Abrir modal
 
 btnNovaTarefa.addEventListener("click", () => {
+
+    tituloModal.textContent = "Nova tarefa";
+    btnSalvar.textContent = "Criar tarefa";
 
     modal.classList.remove("hidden");
 
@@ -71,6 +75,7 @@ function criarCard() {
 
         tarefaEditando = null;
         btnSalvar.textContent = "Criar tarefa";
+        tituloModal.textContent = "Nova tarefa";
 
         form.reset();
 
@@ -708,6 +713,7 @@ function editarTarefa(id) {
     coluna.value = tarefa.coluna;
 
     btnSalvar.textContent = "Salvar alterações";
+    tituloModal.textContent = "Editar tarefa";
 
     modal.classList.remove("hidden");
 
