@@ -1137,3 +1137,40 @@ header{
     transition:.3s;
 
 }
+
+
+/* ==========================
+   DICA DE EDIÇÃO
+========================== */
+
+.dica-edicao{
+
+    display:block;
+
+    margin-top:10px;
+
+    text-align:center;
+
+    color:var(--text-secondary);
+
+    font-size:11px;
+
+    opacity:0;
+
+    transform:translateY(4px);
+
+    transition:
+        opacity .2s ease,
+        transform .2s ease;
+
+    pointer-events:none;
+
+}
+
+.card:hover .dica-edicao{
+
+    opacity:1;
+
+    transform:translateY(0);
+
+}

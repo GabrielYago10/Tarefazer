@@ -129,6 +129,15 @@ function renderizarCard(tarefa) {
 
     card.classList.add("card");
 
+    const dicaEdicao = document.createElement("span");
+
+    dicaEdicao.classList.add("dica-edicao");
+
+    dicaEdicao.textContent = "Dê dois cliques para editar";
+
+    
+
+
     card.addEventListener("dragstart", () => {
 
         cardArrastando = card;
@@ -193,7 +202,7 @@ function renderizarCard(tarefa) {
 
     if (tarefa.dataVencimento) {
 
-        data.textContent = "📅 " + tarefa.dataVencimento;
+        data.textContent = "📅" + tarefa.dataVencimento;
 
     } else {
 
@@ -208,6 +217,7 @@ function renderizarCard(tarefa) {
     card.appendChild(descricaoCard);
     card.appendChild(tag);
     card.appendChild(footer);
+    card.appendChild(dicaEdicao);
 
     return card;
 
@@ -596,7 +606,7 @@ function mostrarToast(mensagem) {
 
     let segundos = 5;
 
-    contadorToast.textContent = String(segundos).padStart(2,"0");
+    contadorToast.textContent = String(segundos).padStart(2, "0");
 
     toastMensagem.textContent = mensagem;
 
@@ -606,7 +616,7 @@ function mostrarToast(mensagem) {
 
         segundos--;
 
-        contadorToast.textContent = String(segundos).padStart(2,"0");
+        contadorToast.textContent = String(segundos).padStart(2, "0");
 
         if (segundos <= 0) {
 
