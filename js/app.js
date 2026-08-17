@@ -339,6 +339,8 @@ function renderizarKanban() {
    andamento e tarefas concluídas nos últimos 14 dias — tudo
    derivado do id de cada tarefa (timestamp de criação) e da
    coluna atual. Puramente decorativo, atrás do dashboard.
+   A cor da camada "Total" acompanha a cor principal escolhida
+   no painel de Personalizar.
 ========================== */
 
 let primeiraRenderizacaoGrafico = true;
@@ -436,23 +438,9 @@ function renderizarGraficoFundo() {
 
     const ultimoPonto = pontosTotal[pontosTotal.length - 1];
 
-    let grade = "";
-
-    for (let i = 1; i <= 3; i++) {
-
-        const y = (altura / 4) * i;
-
-        grade += `<line x1="0" y1="${y}" x2="${largura}" y2="${y}" stroke="rgba(255,255,255,.05)" stroke-width="1"></line>`;
-
-    }
-
-    for (let i = 1; i <= 6; i++) {
-
-        const x = (largura / 7) * i;
-
-        grade += `<line x1="${x}" y1="0" x2="${x}" y2="${altura}" stroke="rgba(255,255,255,.035)" stroke-width="1"></line>`;
-
-    }
+    // A camada "Total" acompanha a cor principal escolhida no painel de Personalizar
+    const corPrimaria = getComputedStyle(document.documentElement)
+        .getPropertyValue("--primary").trim() || "#8B5CF6";
 
     container.innerHTML = `
         <svg viewBox="0 0 ${largura} ${altura}" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
@@ -470,8 +458,8 @@ function renderizarGraficoFundo() {
                 </linearGradient>
 
                 <linearGradient id="gradTotal" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stop-color="#8B5CF6" stop-opacity="0.45" />
-                    <stop offset="100%" stop-color="#8B5CF6" stop-opacity="0" />
+                    <stop offset="0%" stop-color="${corPrimaria}" stop-opacity="0.45" />
+                    <stop offset="100%" stop-color="${corPrimaria}" stop-opacity="0" />
                 </linearGradient>
 
                 <linearGradient id="gradLinha" x1="0" y1="0" x2="1" y2="0">
@@ -488,8 +476,6 @@ function renderizarGraficoFundo() {
                 </filter>
 
             </defs>
-
-            <g class="grade-fundo">${grade}</g>
 
             <g class="onda onda-fundo">
                 <path d="${areaConcluido}" fill="url(#gradConcluido)"></path>
@@ -533,6 +519,133 @@ function renderizarGraficoFundo() {
         primeiraRenderizacaoGrafico = false;
 
     }
+
+}
+
+/* ==========================
+   PERSONALIZAÇÃO
+   Painel "⚙️ Personalizar" — tema claro/escuro e cor principal.
+   Tudo salvo no localStorage, então a preferência fica guardada
+   mesmo depois de fechar o navegador.
+========================== */
+
+const btnPersonalizar = document.querySelector("#btnPersonalizar");
+const painelPersonalizar = document.querySelector("#painelPersonalizar");
+const btnFecharPersonalizar = document.querySelector("#btnFecharPersonalizar");
+const opcoesTema = document.querySelectorAll(".opcao-tema");
+const opcoesCor = document.querySelectorAll(".opcao-cor");
+
+const paletasCor = {
+
+    roxo:    { primary: "#8B5CF6", primary2: "#6D5DF6", rgb: "139,92,246" },
+    azul:    { primary: "#3B82F6", primary2: "#2563EB", rgb: "59,130,246" },
+    verde:   { primary: "#10B981", primary2: "#059669", rgb: "16,185,129" },
+    rosa:    { primary: "#EC4899", primary2: "#DB2777", rgb: "236,72,153" },
+    laranja: { primary: "#F97316", primary2: "#EA580C", rgb: "249,115,22" }
+
+};
+
+function aplicarTema(tema) {
+
+    document.documentElement.classList.toggle("tema-claro", tema === "claro");
+
+    opcoesTema.forEach(botao => {
+
+        botao.classList.toggle("ativo", botao.dataset.tema === tema);
+
+    });
+
+    localStorage.setItem("tarefazerTema", tema);
+
+}
+
+function aplicarCorPrincipal(nome) {
+
+    const paleta = paletasCor[nome];
+
+    if (!paleta) return;
+
+    const raiz = document.documentElement.style;
+
+    raiz.setProperty("--primary", paleta.primary);
+    raiz.setProperty("--primary-2", paleta.primary2);
+    raiz.setProperty("--primary-rgb", paleta.rgb);
+    raiz.setProperty("--primary-gradient", `linear-gradient(135deg, ${paleta.primary} 0%, ${paleta.primary2} 100%)`);
+    raiz.setProperty("--glow-primary", `0 10px 30px rgba(${paleta.rgb},.35)`);
+
+    opcoesCor.forEach(botao => {
+
+        botao.classList.toggle("ativo", botao.dataset.cor === nome);
+
+    });
+
+    localStorage.setItem("tarefazerCor", nome);
+
+}
+
+function fecharPainelPersonalizar() {
+
+    painelPersonalizar.classList.remove("aberto");
+    btnPersonalizar.setAttribute("aria-expanded", "false");
+
+}
+
+if (btnPersonalizar && painelPersonalizar) {
+
+    btnPersonalizar.addEventListener("click", (event) => {
+
+        event.stopPropagation();
+
+        const aberto = painelPersonalizar.classList.toggle("aberto");
+
+        btnPersonalizar.setAttribute("aria-expanded", String(aberto));
+
+    });
+
+    btnFecharPersonalizar.addEventListener("click", fecharPainelPersonalizar);
+
+    document.addEventListener("click", (event) => {
+
+        if (!painelPersonalizar.contains(event.target) && event.target !== btnPersonalizar) {
+
+            fecharPainelPersonalizar();
+
+        }
+
+    });
+
+    document.addEventListener("keydown", (event) => {
+
+        if (event.key === "Escape") {
+
+            fecharPainelPersonalizar();
+
+        }
+
+    });
+
+    opcoesTema.forEach(botao => {
+
+        botao.addEventListener("click", () => aplicarTema(botao.dataset.tema));
+
+    });
+
+    opcoesCor.forEach(botao => {
+
+        botao.addEventListener("click", () => {
+
+            aplicarCorPrincipal(botao.dataset.cor);
+
+            renderizarGraficoFundo();
+
+        });
+
+    });
+
+    // Carrega a preferência salva (ou os padrões) antes da primeira renderização do quadro
+
+    aplicarTema(localStorage.getItem("tarefazerTema") || "escuro");
+    aplicarCorPrincipal(localStorage.getItem("tarefazerCor") || "roxo");
 
 }
 

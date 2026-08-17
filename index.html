@@ -38,9 +38,56 @@
 
             </div>
 
-            <button id="novaTarefa">
-                + Nova tarefa
-            </button>
+            <div class="acoes-header">
+
+                <button id="btnPersonalizar" type="button" class="btn-personalizar" aria-haspopup="true" aria-expanded="false">
+                    ⚙️ Personalizar
+                </button>
+
+                <button id="novaTarefa">
+                    + Nova tarefa
+                </button>
+
+                <div id="painelPersonalizar" class="painel-personalizar">
+
+                    <div class="painel-cabecalho">
+                        <h3>Personalizar</h3>
+                    </div>
+
+                    <div class="grupo-personalizar">
+
+                        <span class="rotulo-personalizar">Tema</span>
+
+                        <div class="opcoes-tema">
+
+                            <button type="button" class="opcao-tema ativo" data-tema="escuro">Escuro</button>
+                            <button type="button" class="opcao-tema" data-tema="claro">Claro</button>
+
+                        </div>
+
+                    </div>
+
+                    <div class="grupo-personalizar">
+
+                        <span class="rotulo-personalizar">Cor principal</span>
+
+                        <div class="opcoes-cor">
+
+                            <button type="button" class="opcao-cor ativo" data-cor="roxo" title="Roxo"></button>
+                            <button type="button" class="opcao-cor" data-cor="azul" title="Azul"></button>
+                            <button type="button" class="opcao-cor" data-cor="verde" title="Verde"></button>
+                            <button type="button" class="opcao-cor" data-cor="rosa" title="Rosa"></button>
+                            <button type="button" class="opcao-cor" data-cor="laranja" title="Laranja"></button>
+
+                        </div>
+
+                    </div>
+
+                    <button type="button" id="btnFecharPersonalizar" class="btn-fechar-personalizar">Fechar</button>
+
+                </div>
+
+            </div>
 
         </header>
 

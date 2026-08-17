@@ -36,9 +36,41 @@
 
     }
 
-    #novaTarefa{
+    .acoes-header{
 
         width:100%;
+
+        gap:10px;
+
+    }
+
+    .btn-personalizar{
+
+        flex:1;
+
+    }
+
+    #novaTarefa{
+
+        flex:1;
+
+    }
+
+    .painel-personalizar{
+
+        right:auto;
+
+        left:50%;
+
+        width:min(280px, calc(100vw - 40px));
+
+        transform:translate(-50%,-8px) scale(.97);
+
+    }
+
+    .painel-personalizar.aberto{
+
+        transform:translate(-50%,0) scale(1);
 
     }
 
