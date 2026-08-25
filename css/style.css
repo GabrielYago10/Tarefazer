@@ -743,6 +743,7 @@ header{
 
 .card{
 
+    position: relative;
     background:var(--surface-hover);
 
     border:1px solid var(--border-soft);
@@ -1504,6 +1505,54 @@ header{
         color: var(--text);
 
         box-shadow: 0 0 0 2px rgba(var(--primary-rgb), .08);
+    }
+
+}
+/* ==========================
+   EDITAR MOBILE
+========================== */
+
+.btn-editar-mobile {
+    display: none;
+}
+
+@media (max-width: 720px) {
+
+    .btn-editar-mobile {
+        display: flex;
+
+        position: absolute;
+
+        top: 12px;
+        right: 12px;
+
+        width: 32px;
+        height: 32px;
+
+        align-items: center;
+        justify-content: center;
+
+        border: 1px solid var(--border);
+
+        border-radius: 8px;
+
+        background: var(--surface);
+
+        color: var(--text);
+
+        font-size: 14px;
+
+        cursor: pointer;
+
+        transition: .2s;
+    }
+
+    .btn-editar-mobile:hover {
+        background: var(--surface-hover);
+
+        border-color: var(--primary);
+
+        transform: scale(1.05);
     }
 
 }

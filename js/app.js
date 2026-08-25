@@ -140,7 +140,22 @@ function renderizarCard(tarefa) {
 
     dicaEdicao.textContent = "Dê dois cliques para editar";
 
-    
+    const btnEditarMobile = document.createElement("button");
+
+    btnEditarMobile.classList.add("btn-editar-mobile");
+
+    btnEditarMobile.textContent = "✏️";
+
+    btnEditarMobile.title = "Editar tarefa";
+
+    btnEditarMobile.addEventListener("click", (event) => {
+
+        event.stopPropagation();
+
+        editarTarefa(tarefa.id);
+
+    });
+
 
 
     card.addEventListener("dragstart", () => {
@@ -223,6 +238,7 @@ function renderizarCard(tarefa) {
     card.appendChild(tag);
     card.appendChild(footer);
     card.appendChild(dicaEdicao);
+    card.appendChild(btnEditarMobile);
 
     return card;
 
@@ -542,10 +558,10 @@ const opcoesCor = document.querySelectorAll(".opcao-cor");
 
 const paletasCor = {
 
-    roxo:    { primary: "#8B5CF6", primary2: "#6D5DF6", rgb: "139,92,246" },
-    azul:    { primary: "#3B82F6", primary2: "#2563EB", rgb: "59,130,246" },
-    verde:   { primary: "#10B981", primary2: "#059669", rgb: "16,185,129" },
-    rosa:    { primary: "#EC4899", primary2: "#DB2777", rgb: "236,72,153" },
+    roxo: { primary: "#8B5CF6", primary2: "#6D5DF6", rgb: "139,92,246" },
+    azul: { primary: "#3B82F6", primary2: "#2563EB", rgb: "59,130,246" },
+    verde: { primary: "#10B981", primary2: "#059669", rgb: "16,185,129" },
+    rosa: { primary: "#EC4899", primary2: "#DB2777", rgb: "236,72,153" },
     laranja: { primary: "#F97316", primary2: "#EA580C", rgb: "249,115,22" }
 
 };
@@ -772,3 +788,57 @@ btnDesfazer.addEventListener("click", () => {
     ultimaTarefaRemovida = null;
 
 });
+
+
+/* ==========================
+   NAVEGAÇÃO MOBILE
+========================== */
+
+const abasMobile = document.querySelectorAll(".aba-mobile");
+const colunasKanban = document.querySelectorAll(".coluna");
+
+abasMobile.forEach(aba => {
+
+    aba.addEventListener("click", () => {
+
+        const colunaSelecionada = aba.dataset.coluna;
+
+        // Ativa a aba clicada
+        abasMobile.forEach(item => {
+            item.classList.remove("ativa");
+        });
+
+        aba.classList.add("ativa");
+
+        // Mostra somente a coluna selecionada
+        colunasKanban.forEach(coluna => {
+
+            if (coluna.dataset.coluna === colunaSelecionada) {
+
+                coluna.style.display = "block";
+
+            } else {
+
+                coluna.style.display = "none";
+
+            }
+
+        });
+
+    });
+
+});
+
+if (window.innerWidth <= 720) {
+
+    colunasKanban.forEach(coluna => {
+
+        if (coluna.dataset.coluna !== "todo") {
+
+            coluna.style.display = "none";
+
+        }
+
+    });
+
+}
