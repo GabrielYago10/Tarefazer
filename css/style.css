@@ -1443,3 +1443,67 @@ header{
     transition:.3s;
 
 }
+
+/* ==========================
+   ABAS MOBILE
+========================== */
+
+.abas-mobile {
+    display: none;
+}
+
+@media (max-width: 720px) {
+
+    .abas-mobile {
+        display: flex;
+        gap: 8px;
+
+        padding: 0 20px;
+        margin-bottom: 20px;
+
+        overflow-x: auto;
+
+        scrollbar-width: none;
+    }
+
+    .abas-mobile::-webkit-scrollbar {
+        display: none;
+    }
+
+    .aba-mobile {
+        flex: 1;
+
+        min-width: 90px;
+
+        padding: 11px 14px;
+
+        border: 1px solid var(--border);
+        border-radius: 10px;
+
+        background: var(--surface);
+        color: var(--text-secondary);
+
+        font-family: inherit;
+        font-size: 13px;
+        font-weight: 600;
+
+        cursor: pointer;
+
+        transition: .2s;
+    }
+
+    .aba-mobile:hover {
+        color: var(--text);
+    }
+
+    .aba-mobile.ativa {
+        background: rgba(var(--primary-rgb), .12);
+
+        border-color: var(--primary);
+
+        color: var(--text);
+
+        box-shadow: 0 0 0 2px rgba(var(--primary-rgb), .08);
+    }
+
+}
