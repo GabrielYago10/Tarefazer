@@ -969,7 +969,7 @@ header{
 
     background:var(--surface-alt);
 
-    color:white;
+    color:var(--text);
 
     border:1px solid var(--border);
 
@@ -1089,7 +1089,7 @@ header{
 
     border: 2px dashed var(--danger);
 
-    color: white;
+    color: var(--text);
 
     display: flex;
 
@@ -1222,7 +1222,7 @@ header{
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
 
-    color: white;
+    color: var(--text);
 
     font-size: 14.5px;
 

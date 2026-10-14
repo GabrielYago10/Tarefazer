@@ -4,6 +4,55 @@ let tarefaEditando = null;
 let ultimaTarefaRemovida = null;
 let tempoToast = null;
 
+/* ==========================
+   AUTO-OCULTAR CONCLUÍDAS
+   Tarefas concluídas somem da coluna "Concluído" depois de 3 dias,
+   mas continuam contadas normalmente no dashboard (a contagem usa
+   o array `tarefas` inteiro, que nunca perde esses itens). A data
+   de conclusão fica salva em `dataConclusao` (timestamp), marcada
+   assim que a tarefa entra na coluna "done" e removida se ela sair.
+========================== */
+
+const TRES_DIAS_MS = 3 * 24 * 60 * 60 * 1000;
+
+function atualizarDataConclusao(tarefa, novaColuna) {
+
+    if (novaColuna === "done" && tarefa.coluna !== "done") {
+
+        tarefa.dataConclusao = Date.now();
+
+    } else if (novaColuna !== "done") {
+
+        delete tarefa.dataConclusao;
+
+    }
+
+}
+
+// Migração: tarefas antigas que já estavam em "done" antes dessa
+// funcionalidade existir não tinham dataConclusao — começamos a
+// contar o prazo de 3 dias a partir de agora para elas.
+
+let precisaSalvarMigracao = false;
+
+tarefas.forEach(tarefa => {
+
+    if (tarefa.coluna === "done" && !tarefa.dataConclusao) {
+
+        tarefa.dataConclusao = Date.now();
+
+        precisaSalvarMigracao = true;
+
+    }
+
+});
+
+if (precisaSalvarMigracao) {
+
+    salvarTarefas(tarefas);
+
+}
+
 const btnNovaTarefa = document.querySelector("#novaTarefa");
 const modal = document.querySelector(".modal-overlay");
 const btnCancelar = document.querySelector(".cancelar");
@@ -62,6 +111,8 @@ function criarCard() {
 
     if (tarefaEditando) {
 
+        atualizarDataConclusao(tarefaEditando, coluna.value);
+
         tarefaEditando.titulo = titulo.value;
         tarefaEditando.descricao = descricao.value;
         tarefaEditando.prioridade = propriedade.value;
@@ -102,6 +153,12 @@ function criarCard() {
         coluna: coluna.value
 
     };
+
+    if (tarefa.coluna === "done") {
+
+        tarefa.dataConclusao = Date.now();
+
+    }
 
     tarefas.push(tarefa);
 
@@ -302,6 +359,8 @@ function habilitarDrop() {
 
             if (tarefa) {
 
+                atualizarDataConclusao(tarefa, coluna.id);
+
                 tarefa.coluna = coluna.id;
 
                 salvarTarefas(tarefas);
@@ -328,6 +387,7 @@ function renderizarKanban() {
     });
 
     const textoPesquisa = pesquisa.value.toLowerCase();
+    const agora = Date.now();
 
     tarefas
         .filter(tarefa => {
@@ -335,6 +395,22 @@ function renderizarKanban() {
             return tarefa.titulo.toLowerCase().includes(textoPesquisa)
 
                 || tarefa.descricao.toLowerCase().includes(textoPesquisa);
+
+        })
+
+        .filter(tarefa => {
+
+            // Esconde da coluna "Concluído" tarefas finalizadas há mais de
+            // 3 dias. Elas continuam no array `tarefas` e no dashboard —
+            // só não aparecem mais no quadro.
+
+            if (tarefa.coluna === "done" && tarefa.dataConclusao) {
+
+                return (agora - tarefa.dataConclusao) < TRES_DIAS_MS;
+
+            }
+
+            return true;
 
         })
 
